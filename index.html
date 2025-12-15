@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2인 커플 여행 일정 - 인천 두바이 모리셔스</title>
+    <style>
+        :root {
+            --color-primary: #E8A5C9;
+            --color-primary-hover: #E391BB;
+            --color-primary-active: #D67DAD;
+            --color-secondary: #F9EEF5;
+            --color-accent1: #E8C5D9;
+            --color-accent2: #B8D9F0;
+            --color-accent3: #F0DCC9;
+            --color-accent4: #E8F0F9;
+            --color-text: #5A4A6B;
+            --color-text-secondary: #9B8BA8;
+            --color-border: #E8D5E0;
+            --color-success: #B8D5C9;
+            --color-warning: #E8D5A8;
+            --color-error: #E8B8B8;
+            --color-bg: #FFFBFE;
+            --color-surface: #FBF7F9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #E8A5C9 0%, #E8C5D9 100%);
+            color: #5A4A6B;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(232, 165, 201, 0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #5A4A6B;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            color: #9B8BA8;
+        }
+
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+            padding: 0 0 15px 0;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: var(--color-primary);
+        }
+
+        .tab-button.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .card {
+            background: var(--color-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(255, 135, 178, 0.12);
+        }
+
+        .card h3 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: var(--color-text);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .day-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .day-tab-button {
+            padding: 8px 16px;
+            background: var(--color-secondary);
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text);
+            transition: all 0.3s ease;
+        }
+
+        .day-tab-button:hover {
+            border-color: var(--color-primary);
+            background: white;
+        }
+
+        .day-tab-button.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .day-content {
+            display: none;
+        }
+
+        .day-content.active {
+            display: block;
+        }
+
+        .itinerary-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .itinerary-item:last-child {
+            border-bottom: none;
+        }
+
+        .itinerary-date {
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 13px;
+        }
+
+        .itinerary-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .itinerary-title {
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .itinerary-desc {
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .itinerary-cost {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .flight-info {
+            background: linear-gradient(135deg, #FFF5FA 0%, #FFE4F0 100%);
+            border-left: 4px solid var(--color-primary);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .flight-route {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .flight-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .itinerary-summary {
+            background: #F8F5FA;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .summary-title {
+            background: linear-gradient(135deg, #E8A5C9 0%, #E8C5D9 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--color-border);
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-day {
+            background: var(--color-secondary);
+            color: var(--color-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .summary-content {
+            flex: 1;
+        }
+
+        .summary-route {
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .summary-desc {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .budget-table th {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent1) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .budget-table td {
+            padding: 13px 12px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 13px;
+        }
+
+        .budget-table tr:nth-child(even):not(.budget-subtotal):not(.budget-total) {
+            background: #FDFCFD;
+        }
+
+        .budget-amount {
+            font-weight: 700;
+            color: #2C1C35;
+            text-align: right;
+        }
+
+        .budget-subtotal {
+            background: linear-gradient(135deg, #A8749E 0%, #9D6B94 100%);
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: 15px 12px;
+            font-size: 14px;
+        }
+
+        .budget-subtotal .budget-amount {
+            color: #FFFFFF;
+        }
+
+        .budget-total {
+            background: linear-gradient(135deg, #A8749E 0%, #9D6B94 100%) !important;
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: 15px 12px;
+            font-size: 16px;
+        }
+
+        .budget-total .budget-amount {
+            color: #FFFFFF;
+        }
+
+        .section-header {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding: 12px 0;
+            border-bottom: 2px solid var(--color-border);
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 15px;
+        }
+
+        .budget-summary-box {
+            background: linear-gradient(135deg, #FFF5FA 0%, #FFE4F0 100%);
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .budget-summary-box h4 {
+            color: var(--color-primary);
+            font-size: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .summary-amount {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .total-summary {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .total-item {
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .total-amount {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .per-person-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .note-section {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .note-section strong {
+            color: var(--color-text);
+        }
+
+        .tip-card {
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(255, 135, 178, 0.12);
+            margin-bottom: 20px;
+        }
+
+        .tip-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .tip-card ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .tip-card li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tip-card li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        .destination-info {
+            background: linear-gradient(135deg, #FFF5FA 0%, #FFE4F0 100%);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid var(--color-primary);
+            margin-bottom: 20px;
+        }
+
+        .destination-info h4 {
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+
+        .destination-info ul {
+            list-style: none;
+        }
+
+        .destination-info li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .destination-info li:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .itinerary-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ 2인 커플 여행 일정</h1>
+            <p>인천 → 두바이 → 모리셔스 | 2026년 5월 28일~6월 7일 (11일간)</p>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="openTab(event, 'overview')">전체 일정</button>
+            <button class="tab-button" onclick="openTab(event, 'detailed')">상세 일정</button>
+            <button class="tab-button" onclick="openTab(event, 'budget')">예산</button>
+            <button class="tab-button" onclick="openTab(event, 'tips')">여행 팁</button>
+        </div>
+
+        <!-- 1. 전체 일정 탭 -->
+        <div id="overview" class="tab-content active">
+            <div class="card">
+                <h3>📋 여행 개요</h3>
+                
+                <div class="flight-info">
+                    <div class="flight-route">✈️ 항공편 1: 인천 → 두바이</div>
+                    <div class="flight-details">
+                        <div><strong>항공사:</strong> 대한항공 (프레스티지석)</div>
+                        <div><strong>출발:</strong> 5월 27일(수) 10:50</div>
+                        <div><strong>도착:</strong> 5월 27일(수) 17:30</div>
+                        <div><strong>소요:</strong> 약 13시간</div>
+                    </div>
+                </div>
+
+                <div class="flight-info">
+                    <div class="flight-route">✈️ 항공편 2: 두바이 → 모리셔스</div>
+                    <div class="flight-details">
+                        <div><strong>항공사:</strong> 에미레이트항공</div>
+                        <div><strong>출발:</strong> 5월 29일(금) 11:00</div>
+                        <div><strong>도착:</strong> 5월 29일(금) 20:40</div>
+                        <div><strong>소요:</strong> 약 6시간 40분</div>
+                    </div>
+                </div>
+
+                <div class="flight-info">
+                    <div class="flight-route">✈️ 항공편 3: 모리셔스 → 두바이</div>
+                    <div class="flight-details">
+                        <div><strong>항공사:</strong> 에미레이트항공</div>
+                        <div><strong>출발:</strong> 6월 5일(목) 11:30</div>
+                        <div><strong>도착:</strong> 6월 5일(목) 17:20</div>
+                        <div><strong>소요:</strong> 약 6시간 50분</div>
+                    </div>
+                </div>
+
+                <div class="flight-info">
+                    <div class="flight-route">✈️ 항공편 4: 두바이 → 인천</div>
+                    <div class="flight-details">
+                        <div><strong>항공사:</strong> 대한항공 (프레스티지석)</div>
+                        <div><strong>출발:</strong> 6월 6일(금) 11:00</div>
+                        <div><strong>도착:</strong> 6월 7일(토) 06:00</div>
+                        <div><strong>소요:</strong> 약 14시간</div>
+                    </div>
+                </div>
+
+                <!-- 일정 요약 -->
+                <div class="itinerary-summary">
+                    <div class="summary-title">
+                        📋 일정 요약
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 1</div>
+                        <div class="summary-content">
+                            <div class="summary-route">인천 → 두바이</div>
+                            <div class="summary-desc">대한항공 프레스티지석으로 편안한 여행 시작</div>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 2</div>
+                        <div class="summary-content">
+                            <div class="summary-route">두바이 체류 (1박)</div>
+                            <div class="summary-desc">두바이 시내 관광 및 휴식</div>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 3</div>
+                        <div class="summary-content">
+                            <div class="summary-route">두바이 → 모리셔스</div>
+                            <div class="summary-desc">에미레이트항공으로 모리셔스 이동</div>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 4-7</div>
+                        <div class="summary-content">
+                            <div class="summary-route">모리셔스 메인 여행 (4박)</div>
+                            <div class="summary-desc">아름다운 해변관광 여행</div>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 8</div>
+                        <div class="summary-content">
+                            <div class="summary-route">모리셔스 → 두바이</div>
+                            <div class="summary-desc">귀국길 두바이 경유</div>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 9</div>
+                        <div class="summary-content">
+                            <div class="summary-route">두바이 체류 (1박)</div>
+                            <div class="summary-desc">마지막 쇼핑 및 휴식</div>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-day">Day 10</div>
+                        <div class="summary-content">
+                            <div class="summary-route">두바이 → 인천</div>
+                            <div class="summary-desc">프레스티지석으로 편안한 귀국</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 상세 일정 탭 -->
+        <div id="detailed" class="tab-content">
+            <div class="card">
+                <h3>📍 상세 일정</h3>
+                
+                <div class="day-tabs">
+                    <button class="day-tab-button active" onclick="openDayTab(event, 'day1')">1D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day2')">2D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day3')">3D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day4')">4D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day5')">5D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day6')">6D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day7')">7D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day8')">8D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day9')">9D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day10')">10D</button>
+                    <button class="day-tab-button" onclick="openDayTab(event, 'day11')">11D</button>
+                </div>
+
+                <!-- Day 1 -->
+                <div id="day1" class="day-content active">
+                    <h4>📅 Day 1: 인천 → 두바이 (5월 28일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">10:50</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">인천국제공항 출발</div>
+                            <div class="itinerary-desc">대한항공 KE 672편 | 프레스티지석 탑승 | 마일리지 예약</div>
+                            <div class="itinerary-cost">유류할증료 약 ₩86,200</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">17:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">두바이국제공항 도착</div>
+                            <div class="itinerary-desc">입국 수속 및 짐 수령</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">19:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 체크인</div>
+                            <div class="itinerary-desc">Armani Hotel Dubai | Burj Khalifa 내 럭셔리 스위트</div>
+                            <div class="itinerary-cost">1박 약 ₩1,200,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">20:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">저녁 식사</div>
+                            <div class="itinerary-desc">호텔 내 Armani/Ristorante에서 이탈리안 디너</div>
+                            <div class="itinerary-cost">약 ₩150,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div id="day2" class="day-content">
+                    <h4>📅 Day 2: 두바이 (5월 29일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 조식</div>
+                            <div class="itinerary-desc">Armani Hotel의 조식 뷔페</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">10:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">부르즈 칼리파 & 두바이 몰 투어</div>
+                            <div class="itinerary-desc">세계 최고의 건물 관광 및 쇼핑</div>
+                            <div class="itinerary-cost">약 ₩200,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">13:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">점심</div>
+                            <div class="itinerary-desc">BOCA 스페인 지중해 레스토랑</div>
+                            <div class="itinerary-cost">약 ₩120,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">15:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">팜 주메이라 해변</div>
+                            <div class="itinerary-desc">아이코닉한 팜 모양의 인공 섬 관광</div>
+                            <div class="itinerary-cost">자유 관광</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">18:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">디나우 크루즈 저녁 투어</div>
+                            <div class="itinerary-desc">두바이 크릭에서 전통 목선 저녁</div>
+                            <div class="itinerary-cost">약 ₩300,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div id="day3" class="day-content">
+                    <h4>📅 Day 3: 두바이 → 모리셔스 (5월 30일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 조식 및 체크아웃</div>
+                            <div class="itinerary-desc">공항으로 출발 준비</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">09:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">두바이 공항 도착</div>
+                            <div class="itinerary-desc">탑승 수속 및 보안 검사</div>
+                            <div class="itinerary-cost">항공권 약 ₩960,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">11:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">두바이 출발</div>
+                            <div class="itinerary-desc">에미레이트항공 EK 717편</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">20:40</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">모리셔스 도착</div>
+                            <div class="itinerary-desc">입국 수속 및 짐물 이동</div>
+                            <div class="itinerary-cost">공항 이동 약 ₩50,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">22:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 체크인</div>
+                            <div class="itinerary-desc">Constance Prince Maurice | 럭셔리 오버워터 빌라</div>
+                            <div class="itinerary-cost">4박 약 ₩6,000,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 4 -->
+                <div id="day4" class="day-content">
+                    <h4>📅 Day 4: 모리셔스 (5월 31일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 조식 및 해변 여유</div>
+                            <div class="itinerary-desc">호텔 비치에서 휴식</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">12:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">점심</div>
+                            <div class="itinerary-desc">호텔 비치 클럽에서 신선한 해산물</div>
+                            <div class="itinerary-cost">약 ₩80,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">14:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">카젤라 파크 - 사자와 함께 걷기 (Lion Walking)</div>
+                            <div class="itinerary-desc">사자와 함께 산책하며 사진 촬영 | 1.5시간 | 사진 메모이즈 제공</div>
+                            <div class="itinerary-cost">약 ₩320,000 (2인 ₩210 x 2)</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">16:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">스파 트리트먼트</div>
+                            <div class="itinerary-desc">호텔 웰니스 스파에서 마사지 (90분)</div>
+                            <div class="itinerary-cost">약 ₩300,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">19:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">저녁 식사</div>
+                            <div class="itinerary-desc">La Rougaille Creole - 전통 모리셔스 요리</div>
+                            <div class="itinerary-cost">약 ₩100,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 5 -->
+                <div id="day5" class="day-content">
+                    <h4>📅 Day 5: 모리셔스 (6월 1일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">09:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">Chamarel 투어</div>
+                            <div class="itinerary-desc">7가지 색의 모래산 (Seven Coloured Earth) 관광</div>
+                            <div class="itinerary-cost">약 ₩200,000 (가이드 포함)</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">11:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">Chamarel Restaurant</div>
+                            <div class="itinerary-desc">맛있는 경치와 함께하는 크리올 요리 점심</div>
+                            <div class="itinerary-cost">약 ₩100,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">13:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">Rhumerie de Chamarel Distillery</div>
+                            <div class="itinerary-desc">럼 증류소 투어 및 시음</div>
+                            <div class="itinerary-cost">약 ₩80,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">19:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">저녁 식사</div>
+                            <div class="itinerary-desc">Escale Creole - 가족 운영 레스토랑</div>
+                            <div class="itinerary-cost">약 ₩90,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 6 -->
+                <div id="day6" class="day-content">
+                    <h4>📅 Day 6: 모리셔스 (6월 2일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">모닝 스노클링 투어</div>
+                            <div class="itinerary-desc">신호초 구민에서 스노클링 관광</div>
+                            <div class="itinerary-cost">약 ₩175,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">12:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">해변 점심</div>
+                            <div class="itinerary-desc">현지 신선 해산물 음식</div>
+                            <div class="itinerary-cost">약 ₩60,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">14:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">포트 루이스 시티 투어</div>
+                            <div class="itinerary-desc">수도 관광 및 지역 문화 체험</div>
+                            <div class="itinerary-cost">약 ₩120,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">19:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">로맨틱 디너</div>
+                            <div class="itinerary-desc">특별한 저녁 식사</div>
+                            <div class="itinerary-cost">약 ₩400,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 7 -->
+                <div id="day7" class="day-content">
+                    <h4>📅 Day 7: 모리셔스 (6월 3일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">여유로운 아침</div>
+                            <div class="itinerary-desc">호텔 해변에서 휴식</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">11:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">스키 드로잉 또는 제트 스키</div>
+                            <div class="itinerary-desc">수상 스포츠 선택</div>
+                            <div class="itinerary-cost">약 ₩175,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">13:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">점심</div>
+                            <div class="itinerary-desc">호텔 레스토랑</div>
+                            <div class="itinerary-cost">약 ₩80,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">18:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">마지막 저녁</div>
+                            <div class="itinerary-desc">Green Island Restaurant - 라군뷰</div>
+                            <div class="itinerary-cost">약 ₩120,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 8 -->
+                <div id="day8" class="day-content">
+                    <h4>📅 Day 8: 모리셔스 → 두바이 (6월 4일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 조식</div>
+                            <div class="itinerary-desc">공항 이동 준비</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">09:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">수중폭포 비행 투어</div>
+                            <div class="itinerary-desc">모리셔스의 신비로운 수중폭포 관광 (35분 비행)</div>
+                            <div class="itinerary-cost">약 ₩850,000 (2인 공항 출발 기준)</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">11:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">점심</div>
+                            <div class="itinerary-desc">호텔 내 레스토랑</div>
+                            <div class="itinerary-cost">약 ₩100,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">14:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">아름다운 해변 여유</div>
+                            <div class="itinerary-desc">프라이빗 비치에서 휴식 및 수영</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">18:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">마지막 저녁</div>
+                            <div class="itinerary-desc">스파 마사지 또는 디너</div>
+                            <div class="itinerary-cost">약 ₩200,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 9 -->
+                <div id="day9" class="day-content">
+                    <h4>📅 Day 9: 모리셔스 → 두바이 (6월 5일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 체크아웃</div>
+                            <div class="itinerary-desc">공항으로 이동</div>
+                            <div class="itinerary-cost">공항 이동 약 ₩50,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">11:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">모리셔스 출발</div>
+                            <div class="itinerary-desc">에미레이트항공 EK 718편</div>
+                            <div class="itinerary-cost">항공권 약 ₩900,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">17:20</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">두바이 도착</div>
+                            <div class="itinerary-desc">입국 수속 및 짐물 이동</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">19:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 체크인 & 저녁 식사</div>
+                            <div class="itinerary-desc">Kempinski The Boulevard Dubai | 시내 중심</div>
+                            <div class="itinerary-cost">1박 약 ₩900,000 | 저녁 약 ₩150,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 10 -->
+                <div id="day10" class="day-content">
+                    <h4>📅 Day 10: 두바이 (6월 6일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">08:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 조식</div>
+                            <div class="itinerary-desc">여유로운 아침</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">09:30</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">최종 쇼핑</div>
+                            <div class="itinerary-desc">두바이 몰 또는 골드 수크</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">12:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">점심</div>
+                            <div class="itinerary-desc">Jun's - 현지 유명 레스토랑</div>
+                            <div class="itinerary-cost">약 ₩130,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">14:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">호텔 스파 & 휴식</div>
+                            <div class="itinerary-desc">호텔 웰니스 스파에서 마지막 트리트먼트</div>
+                            <div class="itinerary-cost">약 ₩200,000</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">18:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">공항으로 이동</div>
+                            <div class="itinerary-desc">탑승 수속 및 보안 검사</div>
+                            <div class="itinerary-cost">공항 이동 약 ₩50,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 11 -->
+                <div id="day11" class="day-content">
+                    <h4>📅 Day 11: 귀국 (6월 6-7일)</h4>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">11:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">두바이 출발</div>
+                            <div class="itinerary-desc">대한항공 KE 672편 | 프레스티지석</div>
+                            <div class="itinerary-cost">유류할증료 약 ₩378,400</div>
+                        </div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-date">06:00</div>
+                        <div class="itinerary-details">
+                            <div class="itinerary-title">인천공항 도착</div>
+                            <div class="itinerary-desc">편안한 여행의 마무리</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 예산 탭 -->
+        <div id="budget" class="tab-content">
+            <div class="card">
+                <h3>💰 여행 예산 (2인 커플 기준)</h3>
+
+                <!-- 항공권 비용 -->
+                <div class="section-header">✈️ 항공권 비용 (2인 기준 가정)</div>
+                <table class="budget-table">
+                    <tr>
+                        <th>항공편</th>
+                        <th>항공사</th>
+                        <th>등급</th>
+                        <th>1인 가격</th>
+                        <th>2인 총액</th>
+                    </tr>
+                    <tr>
+                        <td>인천 → 두바이</td>
+                        <td>대한항공</td>
+                        <td>프레스티지석(업그레이드)</td>
+                        <td class="budget-amount">₩86,200</td>
+                        <td class="budget-amount">₩172,400</td>
+                    </tr>
+                    <tr>
+                        <td>두바이 → 모리셔스</td>
+                        <td>에미레이트항공</td>
+                        <td>이코노미</td>
+                        <td class="budget-amount">₩480,000</td>
+                        <td class="budget-amount">₩960,000</td>
+                    </tr>
+                    <tr>
+                        <td>모리셔스 → 두바이</td>
+                        <td>에미레이트항공</td>
+                        <td>이코노미</td>
+                        <td class="budget-amount">₩450,000</td>
+                        <td class="budget-amount">₩900,000</td>
+                    </tr>
+                    <tr>
+                        <td>두바이 → 인천</td>
+                        <td>대한항공</td>
+                        <td>프레스티지석(업그레이드)</td>
+                        <td class="budget-amount">₩378,400</td>
+                        <td class="budget-amount">₩756,800</td>
+                    </tr>
+                    <tr class="budget-subtotal">
+                        <td colspan="3">항공권 소계 (유류할증료 + 세금)</td>
+                        <td></td>
+                        <td class="budget-amount">₩2,789,200</td>
+                    </tr>
+                </table>
+
+                <!-- 숙박 비용 -->
+                <div class="section-header">🏨 숙박 비용</div>
+                <table class="budget-table">
+                    <tr>
+                        <th>호텔명</th>
+                        <th>지역</th>
+                        <th>1박 가격</th>
+                        <th>박수</th>
+                        <th>총액</th>
+                    </tr>
+                    <tr>
+                        <td>Armani Hotel Dubai</td>
+                        <td>두바이</td>
+                        <td class="budget-amount">₩1,200,000</td>
+                        <td class="budget-amount">1박</td>
+                        <td class="budget-amount">₩1,200,000</td>
+                    </tr>
+                    <tr>
+                        <td>Constance Prince Maurice</td>
+                        <td>모리셔스</td>
+                        <td class="budget-amount">₩1,500,000</td>
+                        <td class="budget-amount">4박</td>
+                        <td class="budget-amount">₩6,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>Kempinski The Boulevard Dubai</td>
+                        <td>두바이</td>
+                        <td class="budget-amount">₩900,000</td>
+                        <td class="budget-amount">1박</td>
+                        <td class="budget-amount">₩900,000</td>
+                    </tr>
+                    <tr class="budget-subtotal">
+                        <td colspan="2">숙박 소계</td>
+                        <td></td>
+                        <td class="budget-amount">6박</td>
+                        <td class="budget-amount">₩8,100,000</td>
+                    </tr>
+                </table>
+
+                <!-- 식사 비용 -->
+                <div class="section-header">🍽️ 식사 비용</div>
+                <table class="budget-table">
+                    <tr>
+                        <th>구분</th>
+                        <th>1인 주당역</th>
+                        <th>왕수</th>
+                        <th>총액</th>
+                    </tr>
+                    <tr>
+                        <td>두바이 (조식 제외)</td>
+                        <td class="budget-amount">₩300,000</td>
+                        <td class="budget-amount">2일</td>
+                        <td class="budget-amount">₩600,000</td>
+                    </tr>
+                    <tr>
+                        <td>모리셔스 (조식 제외)</td>
+                        <td class="budget-amount">₩250,000</td>
+                        <td class="budget-amount">4일</td>
+                        <td class="budget-amount">₩1,000,000</td>
+                    </tr>
+                    <tr class="budget-subtotal">
+                        <td colspan="2">식사 소계</td>
+                        <td class="budget-amount">6일</td>
+                        <td class="budget-amount">₩1,600,000</td>
+                    </tr>
+                </table>
+
+                <!-- 활동 & 관광 -->
+                <div class="section-header">🎯 활동 & 관광</div>
+                <table class="budget-table">
+                    <tr>
+                        <th>활동</th>
+                        <th>2인 기준</th>
+                        <th>비고</th>
+                    </tr>
+                    <tr>
+                        <td>부르즈 칼리파 입장</td>
+                        <td class="budget-amount">₩200,000</td>
+                        <td>At The Top 관광</td>
+                    </tr>
+                    <tr>
+                        <td>Dhow Cruise Dinner</td>
+                        <td class="budget-amount">₩300,000</td>
+                        <td>저녁 크루즈 & 저녁</td>
+                    </tr>
+                    <tr>
+                        <td>Chamarel 투어</td>
+                        <td class="budget-amount">₩400,000</td>
+                        <td>가이드 + 입장료</td>
+                    </tr>
+                    <tr>
+                        <td>스노클링 & 수상스포츠</td>
+                        <td class="budget-amount">₩350,000</td>
+                        <td>장비 포함</td>
+                    </tr>
+                    <tr>
+                        <td>호텔 스파 & 마사지</td>
+                        <td class="budget-amount">₩600,000</td>
+                        <td>커플 트리트먼트</td>
+                    </tr>
+                    <tr>
+                        <td>프라이빗 비치 디너</td>
+                        <td class="budget-amount">₩400,000</td>
+                        <td>호텔 사전 예약</td>
+                    </tr>
+                    <tr>
+                        <td>카젤라 파크 사자와 함께 걷기</td>
+                        <td class="budget-amount">₩320,000</td>
+                        <td>2인 ₩105 x 2 + 입장료</td>
+                    </tr>
+                    <tr>
+                        <td>헬리콥터 투어 (수중폭포)</td>
+                        <td class="budget-amount">₩850,000</td>
+                        <td>2인 공항 출발 기준 35분</td>
+                    </tr>
+                    <tr class="budget-subtotal">
+                        <td colspan="2">활동 소계</td>
+                        <td class="budget-amount">₩3,820,000</td>
+                    </tr>
+                </table>
+
+                <!-- 기타 -->
+                <div class="section-header">📌 기타</div>
+                <table class="budget-table">
+                    <tr>
+                        <th>구분</th>
+                        <th>예상액</th>
+                    </tr>
+                    <tr>
+                        <td>공항 이동 (공항버스/택시)</td>
+                        <td class="budget-amount">₩200,000</td>
+                    </tr>
+                    <tr>
+                        <td>쇼핑 & 기념품</td>
+                        <td class="budget-amount">₩500,000</td>
+                    </tr>
+                    <tr>
+                        <td>팀 & 메뉴바</td>
+                        <td class="budget-amount">₩300,000</td>
+                    </tr>
+                    <tr class="budget-subtotal">
+                        <td>기타 소계</td>
+                        <td class="budget-amount">₩1,000,000</td>
+                    </tr>
+                </table>
+
+                <!-- 전체 예산 요약 -->
+                <div class="budget-summary-box">
+                    <h4>🌍 여행 예산</h4>
+                    <div class="summary-grid">
+                        <div class="summary-item-box">
+                            <div class="summary-label">항공권 (항공 + 유류할증료)</div>
+                            <div class="summary-amount">₩2,789,200</div>
+                        </div>
+                        <div class="summary-item-box">
+                            <div class="summary-label">숙박</div>
+                            <div class="summary-amount">₩8,100,000</div>
+                        </div>
+                        <div class="summary-item-box">
+                            <div class="summary-label">식사</div>
+                            <div class="summary-amount">₩1,600,000</div>
+                        </div>
+                        <div class="summary-item-box">
+                            <div class="summary-label">활동 & 관광</div>
+                            <div class="summary-amount">₩3,820,000</div>
+                        </div>
+                        <div class="summary-item-box">
+                            <div class="summary-label">기타</div>
+                            <div class="summary-amount">₩1,000,000</div>
+                        </div>
+                    </div>
+
+                    <div class="total-summary">
+                        <div class="total-item">
+                            <div class="total-label">항공권</div>
+                            <div class="total-amount">₩2,789,200</div>
+                        </div>
+                        <div class="total-item">
+                            <div class="total-label">숙박</div>
+                            <div class="total-amount">₩8,100,000</div>
+                        </div>
+                        <div class="total-item">
+                            <div class="total-label">식사</div>
+                            <div class="total-amount">₩1,600,000</div>
+                        </div>
+                        <div class="total-item">
+                            <div class="total-label">활동 & 관광</div>
+                            <div class="total-amount">₩3,820,000</div>
+                        </div>
+                        <div class="total-item">
+                            <div class="total-label">기타</div>
+                            <div class="total-amount">₩1,000,000</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(232, 165, 201, 0.3);">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 5px;">총액 (2인)</div>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--color-primary);">₩17,309,200</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 5px;">1인당 평균</div>
+                                <div style="font-size: 18px; font-weight: 700; color: var(--color-primary);">₩8,654,600</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note-section">
+                    <strong>💡 예산 안내</strong><br>
+                    • 항공권은 실시간 가격 변동이 있으므로 사전 예약을 권장합니다<br>
+                    • 식사비는 럭셔리 다이닝 기준이며, 현지 음식은 더 저렴합니다<br>
+                    • 활동비는 2인 기준 선택사항이므로 조정 가능합니다<br>
+                    • 환율 변동 시 가격이 변동될 수 있습니다 (현재 ₩1,100/$ 기준)<br>
+                    • 카젤라 파크 사자와 함께 걷기는 €105/인 (실제 가격: 약 ₩160,000/인)<br>
+                    • 헬리콥터 투어는 공항 출발 기준 €2,492 (2인, 35분 비행 포함)<br>
+                    • 각 항목별 비용은 2024-2025년 최신 정보 기준으로 예상 비용입니다<br>
+                    • 호텔 및 레스토랑 가격은 계절과 시기에 따라 변동될 수 있습니다
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 여행팁 탭 -->
+        <div id="tips" class="tab-content">
+            <div class="card">
+                <h3>🌍 여행 팁 & 정보</h3>
+
+                <div class="destination-info">
+                    <h4>🇦🇪 두바이 (Dubai)</h4>
+                    <ul>
+                        <li><strong>비자:</strong> 한국 여권 소유자는 도착 시 무비자 30일 허용</li>
+                        <li><strong>날씨:</strong> 5월은 매우 덥다 (35-40°C). 가벼운 옷과 자외선 차단제 필수</li>
+                        <li><strong>시차:</strong> 한국보다 5시간 늦음 (GMT+4)</li>
+                        <li><strong>통화:</strong> UAE Dirham (AED). 1 AED = 약 350원</li>
+                        <li><strong>교통:</strong> 메트로 (Metro)가 저렴하고 편리. 택시는 미터기 사용</li>
+                    </ul>
+                </div>
+
+                <div class="destination-info">
+                    <h4>🇲🇺 모리셔스 (Mauritius)</h4>
+                    <ul>
+                        <li><strong>비자:</strong> 한국 여권 소유자는 도착 시 무비자 60일 허용</li>
+                        <li><strong>날씨:</strong> 5월-6월은 겨울철 (18-24°C). 가벼운 긴팔과 얇은 외투 준비</li>
+                        <li><strong>시차:</strong> 한국보다 4시간 늦음 (GMT+4)</li>
+                        <li><strong>통화:</strong> Mauritian Rupee (MUR). 1 MUR = 약 35원</li>
+                        <li><strong>교통:</strong> 렌트카 또는 투어 버스 이용. 도로는 왼쪽 주행</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 35px; color: var(--color-primary); border-bottom: 3px solid var(--color-primary); padding-bottom: 10px; font-size: 18px; font-weight: 700;">🏨 추천 숙소 - 두바이</h4>
+                <div class="tip-card">
+                    <h4>Armani Hotel Dubai</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Burj Khalifa 내부</li>
+                        <li><strong>특징:</strong> 부르즈 칼리파 내 유일한 호텔</li>
+                        <li><strong>가격:</strong> 1박 ₩1,200,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Raffles Dubai</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Wafi District</li>
+                        <li><strong>특징:</strong> 파라오 스타일 아이코닉</li>
+                        <li><strong>가격:</strong> 1박 ₩1,300,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Mandarin Oriental Jumeirah</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Jumeirah Beach</li>
+                        <li><strong>특징:</strong> 5개 수영장</li>
+                        <li><strong>가격:</strong> 1박 ₩1,100,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Kempinski The Boulevard Dubai</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Downtown</li>
+                        <li><strong>특징:</strong> 모던 럭셔리 부티크</li>
+                        <li><strong>가격:</strong> 1박 ₩900,000~</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 35px; color: var(--color-primary); border-bottom: 3px solid var(--color-primary); padding-bottom: 10px; font-size: 18px; font-weight: 700;">🏨 추천 숙소 - 모리셔스</h4>
+                <div class="tip-card">
+                    <h4>Constance Prince Maurice</h4>
+                    <ul>
+                        <li><strong>위치:</strong> 노스 코스트</li>
+                        <li><strong>특징:</strong> 오버워터 빌라</li>
+                        <li><strong>가격:</strong> 1박 ₩1,500,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>One&Only Le Saint Géran</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Belle Mare</li>
+                        <li><strong>특징:</strong> 최고급 럭셔리</li>
+                        <li><strong>가격:</strong> 1박 ₩2,000,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Shangri-La Le Touessrok</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Trou d'Eau Douce</li>
+                        <li><strong>특징:</strong> 190개 객실 오션뷰</li>
+                        <li><strong>가격:</strong> 1박 ₩1,300,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Constance Belle Mare Plage</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Belle Mare</li>
+                        <li><strong>특징:</strong> 트렌디한 럭셔리</li>
+                        <li><strong>가격:</strong> 1박 ₩1,200,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Four Seasons Resort Mauritius at Anahita</h4>
+                    <ul>
+                        <li><strong>위치:</strong> 남동쪽 해안</li>
+                        <li><strong>특징:</strong> 울트라 럭셔리</li>
+                        <li><strong>가격:</strong> 1박 ₩1,800,000~</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>LUX* Belle Mare</h4>
+                    <ul>
+                        <li><strong>위치:</strong> Belle Mare</li>
+                        <li><strong>특징:</strong> 올-인클루시브</li>
+                        <li><strong>가격:</strong> 1박 ₩1,400,000~</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 35px; color: var(--color-primary); border-bottom: 3px solid var(--color-primary); padding-bottom: 10px; font-size: 18px; font-weight: 700;">🍽️ 추천 레스토랑 - 두바이</h4>
+                <div class="tip-card">
+                    <h4>고급 이탈리안 & 미슐랭</h4>
+                    <ul>
+                        <li><strong>Armani/Ristorante:</strong> 부르즈 칼리파 내</li>
+                        <li><strong>BOCA:</strong> 스페인 지중해식</li>
+                        <li><strong>Nobu:</strong> 일본 퓨전</li>
+                        <li><strong>Jun's:</strong> 아시안 퓨전</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>해산물 & 스테이크</h4>
+                    <ul>
+                        <li><strong>Dibba Bay Oysters:</strong> 굴 & 랍스터</li>
+                        <li><strong>Seafire Steakhouse:</strong> 프리미엄 스테이크</li>
+                        <li><strong>Ossiano:</strong> 수중 레스토랑</li>
+                        <li><strong>Wavebreaker:</strong> 시푸드 & 비치</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 35px; color: var(--color-primary); border-bottom: 3px solid var(--color-primary); padding-bottom: 10px; font-size: 18px; font-weight: 700;">🍽️ 추천 레스토랑 - 모리셔스</h4>
+                <div class="tip-card">
+                    <h4>파인다이닝</h4>
+                    <ul>
+                        <li><strong>Le Barachois:</strong> Constance Prince Maurice의 플로팅 레스토랑 (미슐랭 스타)</li>
+                        <li><strong>Ayo by Clarence:</strong> 크리올</li>
+                        <li><strong>The Plantation Club:</strong> 파인다이닝</li>
+                        <li><strong>Ambre:</strong> 럭셔리 다이닝</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>크리올 요리</h4>
+                    <ul>
+                        <li><strong>Chamarel Restaurant:</strong> 크리올 + 경치</li>
+                        <li><strong>Escale Creole:</strong> 가족 운영 레스토랑</li>
+                        <li><strong>La Rougaille Creole:</strong> 전통 크리올 (Grand Baie)</li>
+                        <li><strong>Varangue Sur Morne:</strong> 크리올 & 전망</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>해산물 & 국제</h4>
+                    <ul>
+                        <li><strong>Green Island Restaurant:</strong> 라군뷰</li>
+                        <li><strong>Cabane des Fruits de Mer:</strong> 생선 구이</li>
+                        <li><strong>Antonio e Giulia:</strong> 이탈리안</li>
+                        <li><strong>Riva:</strong> 이탈리안 시푸드</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            evt.currentTarget.classList.add('active');
+        }
+
+        function openDayTab(evt, dayName) {
+            const dayContents = document.querySelectorAll('.day-content');
+            dayContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(dayName).classList.add('active');
+
+            const dayButtons = document.querySelectorAll('.day-tab-button');
+            dayButtons.forEach(btn => btn.classList.remove('active'));
+            evt.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
